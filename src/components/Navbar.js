@@ -53,7 +53,11 @@ const Navbar = () => {
                             setSinput(e.target.value)
                         }}  />
                         <button className="btn btn-outline-success" onClick={()=>{
-                            dispatch(searchblog(sinput))
+                            let payload = {
+                                blogs:logresponse.data,
+                                input:sinput
+                            }
+                            dispatch(searchblog(payload))
                         }}>Search</button>
                     <button type="button" className="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal1">
                     Login

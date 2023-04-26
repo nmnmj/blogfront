@@ -3,18 +3,20 @@ import { createSlice } from '@reduxjs/toolkit'
 export const blogSlice = createSlice({
   name: 'blogs',
   initialState: {
-    blogs:[]
+    blogs:[],
+    searchedblog:[]
   },
   reducers: {
     allblogs: (state, action) => {
       return state= {...state, blogs:action.payload}
     },
     searchblog: (state, action) => {
-      if(action.payload!==''){
-        return state = {...state, blogs:state.blogs.filter((c)=>c.title.toLowerCase().includes(action.payload.toLowerCase()))}
+      console.log(action.payload)
+      if(action.payload.input==''){
+        return state = {...state, searchedblog:[]}
       }
-      else{
-        return {...state}
+      if(action.payload!==''){
+        return state = {...state, searchedblog:state.blogs.filter((c)=>c.title.toLowerCase().includes(action.payload.input.toLowerCase()))}
       }
     },
   },
