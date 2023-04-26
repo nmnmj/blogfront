@@ -59,12 +59,17 @@ const Navbar = () => {
                             }
                             dispatch(searchblog(payload))
                         }}>Search</button>
-                    <button type="button" className="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal1">
-                    Login
-                    </button>
-                    <button type="button" className="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Register
-                    </button>
+                    {
+                       !localStorage.getItem("name") && <>
+                        <button type="button" className="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                        Login
+                        </button>
+                        <button type="button" className="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Register
+                        </button>
+                        
+                        </>
+                    }
                 </div>
                 </div>
             </div>
