@@ -73,7 +73,7 @@ const BlogList = () => {
           </button>
           <button onClick={()=>{
             dispatch(allblogs([...blogs].reverse()))
-          }} >Sort Ascending</button>
+          }} >Sort Asce/Desc</button>
         </div>
         
       }
