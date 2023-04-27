@@ -50,8 +50,8 @@ const BlogList = () => {
                   By: {blog.name}
                 </span>
               </h5>
-              <div className="card-body">
-                <p className="card-text">{blog.description}</p>
+              <div className="card-body bg-secondary">
+                <p className="card-text ">{blog.description}</p>
                 <span style={{ float: 'right', fontSize: '12px' }}>
                   Posted:- {blog.time}
                 </span>
@@ -61,17 +61,26 @@ const BlogList = () => {
         </>
        }) 
       }
-      <button
-        onClick={async () => {
-          await sortedBlogs();
-        }}
-      >
-        Sort By Date
-      </button>
-      <button onClick={()=>{
-        dispatch(allblogs([...blogs].reverse()))
-      }} >Sort Ascending</button>
-      {blogs ? blogs.map((blog, i) => (
+      {
+        searchedblog.length <= 0 &&
+        <div>
+          <button
+            onClick={async () => {
+              await sortedBlogs();
+            }}
+          >
+            Sort By Date
+          </button>
+          <button onClick={()=>{
+            dispatch(allblogs([...blogs].reverse()))
+          }} >Sort Ascending</button>
+        </div>
+        
+      }
+      
+
+      { searchedblog.length <= 0 &&
+      blogs ? blogs.map((blog, i) => (
         <div key={i}>
           <div className="card">
             <h5 className="card-header text-center">
@@ -94,7 +103,12 @@ const BlogList = () => {
       ))
       :
       <div>
-        Loading...
+        {
+          searchedblog.length <= 0 &&
+          <div>
+            Loading...
+          </div>
+        }
       </div>
       }
     </>
@@ -103,61 +117,3 @@ const BlogList = () => {
 
 export default BlogList;
 
-
-
-// import React, { useEffect, useState } from 'react';
-// import { useGetallblogQuery, useSortedblogMutation } from '../services/post';
-
-// const BlogList = () => {
-//   const [blogListData, setBlogListData] = useState([]);
-//   const { data: blogsData, isLoading, isError } = useGetallblogQuery();
-//   const [sortedBlogs, sortedBlogResponse] = useSortedblogMutation();
-
-//   useEffect(() => {
-//     if (sortedBlogResponse.data) {
-//       console.log("sorted", sortedBlogResponse.data);
-//       setBlogListData(sortedBlogResponse.data);
-//     }
-//   }, [sortedBlogResponse]);
-
-//   useEffect(() => {
-//     setBlogListData(blogsData);
-//   }, [blogsData]);
-
-//   console.log(blogListData);
-
-//   return (
-//     <>
-//       <button
-//         onClick={async () => {
-//           await sortedBlogs();
-//         }}
-//       >
-//         Sort By Date
-//       </button>
-//       {blogListData && blogListData.map((blog, i) => (
-//         <div key={i}>
-//           <div className="card">
-//             <h5 className="card-header text-center">
-//               <span style={{ float: 'left', fontSize: '14px' }}>
-//                 Category: {blog.category}
-//               </span>
-//               <u>{blog.title}</u>
-//               <span style={{ float: 'right', fontSize: '16px' }}>
-//                 By: {blog.name}
-//               </span>
-//             </h5>
-//             <div className="card-body">
-//               <p className="card-text">{blog.description}</p>
-//               <span style={{ float: 'right', fontSize: '12px' }}>
-//                 Posted: {blog.time}
-//               </span>
-//             </div>
-//           </div>
-//         </div>
-//       ))}
-//     </>
-//   );
-// };
-
-// export default BlogList;

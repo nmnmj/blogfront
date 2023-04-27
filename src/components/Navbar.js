@@ -47,6 +47,15 @@ const Navbar = () => {
                     <Link className="nav-link" to="/home">Home</Link>
                     </li>
                    
+                    <h3 className='text-light ms-5'>
+                        {
+                            localStorage.getItem("name") &&
+                            <div>
+                                Welcome {localStorage.getItem("name").charAt(0).toUpperCase().concat(localStorage.getItem("name").substring(1)) }
+                            </div>
+                        }
+                    </h3>
+                   
                 </ul>
                 <div className="d-flex">
                         <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={sinput} onChange={(e)=>{

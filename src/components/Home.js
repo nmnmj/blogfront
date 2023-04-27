@@ -188,7 +188,7 @@ const Home = () => {
                     <button className='btn btn-primary mt-3' type="submit">Add Blog</button>
                 </form>
     
-                <button className='btn btn-danger mt-5' onClick={()=>{
+                <button className='btn btn-danger mt-5 float-end' onClick={()=>{
                     localStorage.removeItem("name")
                     navigate("/")
                 }}>Logout</button>
@@ -196,7 +196,7 @@ const Home = () => {
             </div>
             :
             <div>
-                
+                Login To Access Home Page
             </div>
 
         }
