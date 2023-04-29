@@ -11,7 +11,6 @@ export const blogSlice = createSlice({
       return state= {...state, blogs:action.payload}
     },
     searchblog: (state, action) => {
-      console.log(action.payload)
       if(action.payload.input==''){
         return state = {...state, searchedblog:[]}
       }

@@ -1,10 +1,15 @@
 import React, { useEffect, useReducer, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Blogreducer } from '../reducers/Blogreducer'
 import { useCreateblogMutation, useDeleteBlogMutation, useGetblogbynameMutation, useUpdateblogMutation } from '../services/post'
+import {FiEdit} from 'react-icons/fi'
+import { getToken, removeToken } from '../services/token'
 
 const Home = () => {
     const navigate = useNavigate()
+    const token = getToken()
+    const location = useLocation()
+    // console.log(location.state)
     const [description, setDescription] = useState('')
     const [state, dispatch] = useReducer(Blogreducer, {
         blogs: [],
@@ -17,22 +22,22 @@ const Home = () => {
     const [getmyblog, myblogresponse] = useGetblogbynameMutation()
 
     useEffect(() => {
+        // console.log(updateresponse)
         if (updateresponse.data) {
             dispatch({
                 type: 'myblogs',
-                payload: updateresponse.data
+                payload: updateresponse.data.blogs
             })
-            console.log('update=', updateresponse.data)
         }
     }, [updateresponse])
 
     useEffect(() => {
+        // console.log(addresponse)
         if (addresponse.data) {
             dispatch({
                 type: 'myblogs',
-                payload: addresponse.data
+                payload: addresponse.data.blogs
             })
-            console.log('added=', addresponse.data)
         }
     }, [addresponse])
 
@@ -40,28 +45,27 @@ const Home = () => {
         if (deleteresponse.data) {
             dispatch({
                 type: 'myblogs',
-                payload: deleteresponse.data
+                payload: deleteresponse.data.blogs
             })
-            console.log('delete=', deleteresponse.data)
         }
     }, [deleteresponse])
 
     useEffect(() => {
         if (myblogresponse.data) {
-            console.log('myblogs', myblogresponse.data)
             dispatch({
                 type: 'myblogs',
-                payload: myblogresponse.data
+                payload: myblogresponse.data.blogs
             })
         }
     }, [myblogresponse])
 
     useEffect(() => {
-        getmyblog({ name: localStorage.getItem('name') })
+        token && getmyblog({ name: localStorage.getItem('name') }) 
+        
     }, [addresponse, getmyblog])
 
     useEffect(() => {
-        getmyblog({ name: localStorage.getItem('name') })
+        token && getmyblog({ name: localStorage.getItem('name') })
     }, [getmyblog])
 
     // console.log(state)
@@ -72,13 +76,13 @@ const Home = () => {
                 return <>
                         <div className="card" key={i}>
                             <h5 className="card-header text-center">
-                                <span style={{ float: 'left', fontSize: '14px' }}>
+                                <span style={{ float: 'left', fontSize: '1.4vw' }}>
                                 Category: {blog.category}
                                 </span>
-                                <u>{blog.title}</u>
-                                <span style={{ float: 'right', fontSize: '16px' }}>
+                                <u style={{fontSize:"1.6vw"}}>{blog.title}</u>
+                                <span style={{ float: 'right', fontSize: '1.6vw', cursor:"pointer" }}>
                                     By: {blog.name}
-                                    <button className='ms-5' onClick={()=>{
+                                    <span className='ms-5 text-primary' style={{fontSize:"1.6vw"}} onClick={()=>{
                                         dispatch({
                                             type:"addtoupdate",
                                             payload:{
@@ -89,9 +93,9 @@ const Home = () => {
                                         })
                                        
                                     }} >
-                                    <i className="fa fa-edit text-success"></i>
-                                    </button>
-                                    <button className='ms-2' onClick={async()=>{
+                                    <FiEdit />
+                                    </span>
+                                    <span className='ms-5' style={{fontSize:"1.6vw"}} onClick={async()=>{
                                         
                                         let adata = {
                                             _id:blog._id
@@ -102,7 +106,7 @@ const Home = () => {
                                         </div>
                                     }} >
                                     <i className="fa fa-trash text-danger"></i>
-                                    </button>
+                                    </span>
                                 </span>
                             </h5>
                             <div className="card-body">
@@ -120,7 +124,7 @@ const Home = () => {
                                             }}
                                         />
                                         <button className='btn btn-success' onClick={async ()=>{
-                                            console.log(description)
+                                            // console.log(description)
                                             let adata = {
                                                 _id:blog._id,
                                                 name:blog.name,
@@ -143,7 +147,7 @@ const Home = () => {
                                     :
                                     <p className="card-text">{blog.description}</p>
                                 }
-                                <span style={{ float: 'right', fontSize: '12px' }}>
+                                <span style={{ float: 'right', fontSize: '1.2vw' }}>
                                 Posted: {blog.time}
                                 </span>
                             </div>
@@ -153,7 +157,7 @@ const Home = () => {
         }
         
         {
-            localStorage.getItem("name")!=null ?
+            token && localStorage.getItem("name")!=null ?
             <div>
                 <form id="addblog" onSubmit={async(e)=>{
                     e.preventDefault()
@@ -164,7 +168,7 @@ const Home = () => {
                         description: dataa.get("description"),
                         category:dataa.get("category")
                     }
-                    console.log(adata)
+                    // console.log(adata)
                     await addblog(adata)
                     if(addresponse.isLoading) return <div>
                         Adding...
@@ -172,11 +176,11 @@ const Home = () => {
                     document.getElementById("addblog").reset()
                 }}>
                     <h3 style={{textAlign:"center"}}>
-                        <u>
+                        <u style={{fontSize:"1.6vw"}}>
                         Add New Blog
                         </u>
                         </h3>
-                    <input type="text" name="title" placeholder='Title*' required />
+                    <input type="text" name="title" placeholder='Title*' required style={{width:"40%"}} />
                     <textarea rows="5" className='form-control' name="description" placeholder='description*'></textarea>
                     Category :- <select name="category" className='mt-2'>
                         <option>food</option>
@@ -190,6 +194,7 @@ const Home = () => {
     
                 <button className='btn btn-danger mt-5 float-end' onClick={()=>{
                     localStorage.removeItem("name")
+                    removeToken()
                     navigate("/")
                 }}>Logout</button>
                 

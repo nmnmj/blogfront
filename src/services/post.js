@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { getToken } from './token'
 
 export const blogApi = createApi({
     reducerPath : 'blogApi',
     baseQuery : fetchBaseQuery({
-        baseUrl: "https://blogback-ten.vercel.app/"
+        baseUrl: "https://blogback-73ba.vercel.app/"
     }),
 
     endpoints : (builder)=>({
@@ -15,7 +16,6 @@ export const blogApi = createApi({
         }),
         getblogbycategory : builder.mutation({
             query:(category)=>{
-                console.log("category from",category)
                 return {
                     url:`category`,
                     method:"POST",
@@ -25,41 +25,49 @@ export const blogApi = createApi({
         }),
         getblogbyname : builder.mutation({
             query:(namedata)=>{
-                console.log("namedata from",namedata)
                 return {
                     url:`myblog`,
                     method:"POST",
-                    body:namedata
+                    body:namedata,
+                    headers:{
+                        'authorization': `Bearer ${getToken()}`
+                    }
                 }
             }
         }),
         deleteBlog : builder.mutation({
             query: (deletedata)=>{
-                console.log("deletedata",deletedata)
                 return {
                     url:"deleteblog",
                     method:"DELETE",
-                    body:deletedata
+                    body:deletedata,
+                    headers:{
+                        'authorization': `Bearer ${getToken()}`
+                    }
                 }
             }
         }),
         createblog : builder.mutation({
             query: (createblogdata)=>{
-                console.log("createblogdata",createblogdata)
                 return {
                     url:"createblog",
                     method:"POST",
-                    body:createblogdata
+                    body:createblogdata,
+                    headers:{
+                        'authorization': `Bearer ${getToken()}`
+                    }
                 }
             }
         }),
         updateblog : builder.mutation({
             query: (updateblogdata)=>{
-                console.log("updateblogdata",updateblogdata)
                 return {
                     url:"updateblog",
                     method:"PUT",
-                    body:updateblogdata
+                    body:updateblogdata,
+                    headers:{
+                        'authorization': `Bearer ${getToken()}`
+                    }
                 }
             }
         }),
@@ -82,7 +90,6 @@ export const blogApi = createApi({
         }),
         userlogin : builder.mutation({
             query: (user)=>{
-                console.log("user",user)
                 return {
                     url:"login",
                     method:"POST",

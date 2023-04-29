@@ -12,6 +12,8 @@ const BlogList = () => {
   const [key, setKey] = useState(Date.now()); // add a key state
 
   const { data: blogsData, isLoading, isError } = useGetallblogQuery({ key }); // pass the key to the hook
+  // console.log("blogsData",blogsData)
+
 
   const [sortedBlogs, sortedBlogResponse] = useSortedblogMutation();
   useEffect(() => {
@@ -23,15 +25,15 @@ const BlogList = () => {
   }, [sortedBlogResponse]);
 
   useEffect(() => {
+    // console.log("blogsData")
     setBlogListData(blogsData);
     dispatch(allblogs(blogsData))
     
   }, [blogsData]);
 
 
-  console.log("bloger",blogs)
-  console.log("searched blog",searchedblog)
-  // console.log(blogListData);
+  // console.log("bloger",blogs)
+  // console.log("searched blog",searchedblog)
   
   return (
     <>
@@ -42,17 +44,17 @@ const BlogList = () => {
            <div key={i}>
             <div className="card">
               <h5 className="card-header text-center">
-                <span style={{ float: 'left', fontSize: '14px' }}>
+                <span style={{ float: 'left', fontSize: '1.4vw' }}>
                   Category: {blog.category}
                 </span>
-                <u>{blog.title}</u>
-                <span style={{ float: 'right', fontSize: '16px' }}>
+                <u style={{fontSize:"1.6vw"}}>{blog.title}</u>
+                <span style={{ float: 'right', fontSize: '1.6vw' }}>
                   By: {blog.name}
                 </span>
               </h5>
               <div className="card-body bg-secondary">
                 <p className="card-text ">{blog.description}</p>
-                <span style={{ float: 'right', fontSize: '12px' }}>
+                <span style={{ float: 'right', fontSize: '1.2vw' }}>
                   Posted:- {blog.time}
                 </span>
               </div>
@@ -84,17 +86,17 @@ const BlogList = () => {
         <div key={i}>
           <div className="card">
             <h5 className="card-header text-center">
-              <span style={{ float: 'left', fontSize: '14px' }}>
+              <span style={{ float: 'left', fontSize: '1.4vw' }}>
                 Category: {blog.category}
               </span>
-              <u>{blog.title}</u>
-              <span style={{ float: 'right', fontSize: '16px' }}>
+              <u style={{fontSize:"1.6vw"}}>{blog.title}</u>
+              <span style={{ float: 'right', fontSize: '1.6vw' }}>
                 By: {blog.name}
               </span>
             </h5>
             <div className="card-body">
               <p className="card-text">{blog.description}</p>
-              <span style={{ float: 'right', fontSize: '12px' }}>
+              <span style={{ float: 'right', fontSize: '1.2vw' }}>
                 Posted:- {blog.time}
               </span>
             </div>

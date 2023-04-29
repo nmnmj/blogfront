@@ -3,9 +3,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useUserloginMutation, useUserregisterMutation } from '../services/post'
 import { useDispatch } from 'react-redux'
 import { searchblog } from '../services/blogSlice'
+import { getToken, storeToken } from '../services/token'
 
 
 const Navbar = () => {
+    let token = getToken()
+    // console.log( token==null )
     let dispatch = useDispatch()
     let[sinput, setSinput] = useState('')
     let[userregister, regresponse] = useUserregisterMutation()
@@ -16,11 +19,10 @@ const Navbar = () => {
         if(regresponse.isSuccess){
             // console.log(regresponse)
         }
-        if(logresponse.isSuccess){
-            // console.log(logresponse)
-            // localStorage.setItem("name", logresponse.data)
-            navigate("/home")
-        }
+        // if(logresponse.isSuccess){
+        //     navigate("/home", {state: logresponse.data})
+        // }
+      
     },[regresponse, logresponse])
 
     if(regresponse.isLoading) return <div>
@@ -49,7 +51,7 @@ const Navbar = () => {
                    
                     <h3 className='text-light ms-5'>
                         {
-                            localStorage.getItem("name") &&
+                            localStorage.getItem("name") && token && 
                             <div>
                                 Welcome {localStorage.getItem("name").charAt(0).toUpperCase().concat(localStorage.getItem("name").substring(1)) }
                             </div>
@@ -69,7 +71,8 @@ const Navbar = () => {
                             dispatch(searchblog(payload))
                         }}>Search</button>
                     {
-                       !localStorage.getItem("name") && <>
+                       token==null &&
+                       <>
                         <button type="button" className="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#exampleModal1">
                         Login
                         </button>
@@ -97,8 +100,17 @@ const Navbar = () => {
                             name:dataa.get("name"),
                             password:dataa.get("password"),
                         }
-                        localStorage.setItem("name", adata.name)
                         await userlogin(adata)
+                        // console.log(logresponse)
+                        if(await logresponse.data.status==='success'){
+                            storeToken(logresponse.data.token)
+                            localStorage.setItem("name", logresponse.data.name)
+                            navigate("/home", {state:logresponse.data})
+                            
+                        }
+                        else if(await logresponse.data.status==='failed'){
+                            alert(logresponse.data.user)
+                        }
                     }
                 }>
                 <div className="modal-content">

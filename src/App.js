@@ -3,9 +3,7 @@ import './App.css';
 import About from './components/About';
 import Card from './components/BlogList';
 import Layout from './components/Layout';
-import { useGetallblogQuery } from './services/post';
 import Home from './components/Home';
-import { useEffect, useState } from 'react';
 import BlogList from './components/BlogList';
 
 function App() {
